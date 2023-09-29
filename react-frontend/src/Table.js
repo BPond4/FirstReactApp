@@ -32,10 +32,11 @@ function TableHeader() {
 
   function Table(props) {
     return (
-      <table>
-        <TableHeader />
-        <TableBody characterData={props.characterData} />
-      </table>
+        <table>
+            <TableHeader />
+            <TableBody characterData={props.characterData} 
+                removeCharacter={props.removeCharacter} />
+        </table>
     );
 }
 
