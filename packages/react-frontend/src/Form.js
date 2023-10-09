@@ -7,6 +7,7 @@ function Form(props) {
        {
           name: "",
           job: "",
+          
        }
     );
 

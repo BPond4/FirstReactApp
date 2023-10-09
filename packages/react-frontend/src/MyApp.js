@@ -31,18 +31,42 @@ function MyApp() {
 
     function updateList(person) { 
         postUser(person)
-          .then(() => setCharacters([...characters, person]))
+          .then((response) => {
+            if(response.status === 201){
+                response.json()
+                    .then((userData) => {
+                        setCharacters([...characters, userData])
+                    })
+            }
+            else{
+                throw new Error(`Unexpected status code: ${response.status}`);
+            }
+          })
           .catch((error) => {
             console.log(error);
           })
     }
 
-    function removeOneCharacter (index) {
-	    const updated = characters.filter((character, i) => {
-	        return i !== index
-	    });
-	  setCharacters(updated);
-	}
+    function removeOneCharacter(index) {
+        const userIdToDelete = characters[index].id;
+      
+        // make a http delete request to the backend
+        fetch(`http://localhost:8000/users/${userIdToDelete}`, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            if (response.status === 204) {
+              // if the delete request was successful, update the state to remove the user from the frontend
+              const updatedCharacters = characters.filter((character, i) => i !== index);
+              setCharacters(updatedCharacters);
+            } else {
+              throw new Error(`Unexpected status code: ${response.status}`);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
 
 
       
